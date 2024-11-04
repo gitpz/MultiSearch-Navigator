@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索导航</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+<div id="app" class="container main-content">
+    <h1>导航</h1>
+    <div class="category-buttons">
+        <button v-for="(category, index) in categories" :key="index" @click="selectCategory(category.value)"
+                :class="{'active': selectedCategory === category.value}">{{ category.label }}
+        </button>
+    </div>
+    <form @submit.prevent="search">
+        <div class="search-engines">
+            <label v-for="(engine, index) in searchEngines[selectedCategory]" :key="index" class="engine-checkbox">
+                <input type="checkbox" :value="engine.url" v-model="selectedEngines">
+                {{ engine.name }}
+            </label>
+        </div>
+        <input type="text" id="searchQuery" v-model="searchQuery" @input="getSuggestions" autocomplete="off" placeholder="输入搜索关键词...">
+        <ul v-if="suggestions.length > 0" class="suggestions" id="suggestionsUl" @mouseleave="startTimer"
+            @mouseenter="clearTimer">
+            <li class="suggestion-item" v-for="(suggestion, index) in suggestions" :key="index"
+                @click="selectSuggestion(suggestion)">{{ suggestion }}
+            </li>
+        </ul>
+        <button type="submit">{{ submitText }}</button>
+    </form>
+</div>
+
+</body>
+
+<script src="js/vue.min.js"></script>
+<script src="script.js"></script>
+</html>
